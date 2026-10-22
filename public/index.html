@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ИИ-консультант магазина «Зерно» — демо</title>
+  <meta name="description" content="Живое демо ИИ-консультанта для интернет-магазина: подбирает товар по каталогу, помнит клиента между визитами, оформляет заказ и передаёт его менеджеру в Telegram.">
+  <meta name="theme-color" content="#f4f3ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14171a" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="ИИ-консультант для интернет-магазина">
+  <meta property="og:description" content="Подберёт кофе, запомнит вас и оформит заказ. Попробуйте поговорить с ним.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div class="ribbon">
+    <div class="wrap ribbon__inner">
+      <span><b>Демо.</b> Магазин вымышленный, нейросеть и каталог настоящие: спрашивайте что угодно.</span>
+      <a href="https://github.com/hastilkas/ai-consultant" target="_blank" rel="noopener">Код на GitHub</a>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="logo" href="./" aria-label="Зерно, на главную">
+        <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <ellipse cx="16" cy="16" rx="10" ry="13.5" transform="rotate(28 16 16)" fill="currentColor"/>
+          <path d="M11 6.5c5.5 4 1 11.5 9.5 19" fill="none" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span><b>Зерно</b><small>свежая обжарка · Москва</small></span>
+      </a>
+      <span class="topbar__hint">Обжариваем по понедельникам и четвергам</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <h1>ИИ-консультант, который продаёт как хороший бариста</h1>
+      <p>Подбирает товар по реальному каталогу и наличию, помнит клиента между визитами, оформляет заказ и передаёт менеджеру в Telegram. Справа видно, что бот делает и что запомнил.</p>
+    </section>
+
+    <div class="stage">
+      <section class="chat" aria-label="Чат с консультантом">
+        <header class="chat__head">
+          <div class="avatar" aria-hidden="true">В</div>
+          <div class="chat__who">
+            <b>Варя</b>
+            <span class="chat__status" id="status">ИИ-консультант · онлайн</span>
+          </div>
+          <a class="chat__inspect" href="#inspector">Под капотом</a>
+        </header>
+
+        <div class="chat__log" id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+        <div class="chat__suggest" id="suggest" aria-label="Примеры вопросов"></div>
+
+        <form class="chat__form" id="form" autocomplete="off">
+          <label class="sr-only" for="input">Сообщение</label>
+          <textarea id="input" rows="1" maxlength="800" placeholder="Спросите про кофе…" enterkeyhint="send"></textarea>
+          <button type="submit" id="send" aria-label="Отправить">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </section>
+
+      <aside class="inspector" id="inspector" aria-label="Что происходит внутри">
+        <div class="inspector__head">
+          <h2>Под капотом</h2>
+          <p>Эти данные бот хранит на сервере. Клиент их не видит, менеджер получает в Telegram.</p>
+        </div>
+
+        <section class="panel" id="memory-panel">
+          <h3>Память о клиенте <span class="panel__badge" id="visits"></span></h3>
+          <dl class="memory" id="memory"></dl>
+          <p class="panel__empty" id="memory-empty">Пока пусто. Представьтесь и расскажите, чем варите кофе и какой вкус любите: бот запомнит это надолго.</p>
+          <div class="panel__actions">
+            <button type="button" class="btn" id="revisit">Вернуться через неделю</button>
+            <button type="button" class="btn btn--ghost" id="reset">Забыть меня</button>
+          </div>
+          <p class="panel__note">«Вернуться через неделю» перематывает время: так видно, как бот встречает постоянного клиента.</p>
+        </section>
+
+        <section class="panel">
+          <h3>Корзина</h3>
+          <div id="cart"></div>
+        </section>
+
+        <section class="panel">
+          <h3>Что делал бот</h3>
+          <ol class="steps" id="steps"></ol>
+          <p class="panel__empty" id="steps-empty">Здесь появятся действия: поиск по каталогу, карточки, запоминание, заказ.</p>
+        </section>
+
+        <section class="panel" id="owner-panel" hidden>
+          <h3>Сообщение менеджеру в Telegram</h3>
+          <div class="tg" id="owner"></div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="catalog">
+      <div class="catalog__head">
+        <h2>Каталог, по которому отвечает бот</h2>
+        <p>Бот не придумывает товары и цены: всё берётся отсюда, включая наличие. Гватемалы, например, сейчас нет, и он об этом скажет.</p>
+      </div>
+      <div class="catalog__grid" id="catalog"></div>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    <span>Сделано <a href="https://hastilkas.github.io" target="_blank" rel="noopener">hastil</a>. Хотите такого же консультанта для своего магазина? Напишите.</span>
+  </footer>
+</body>
+</html>

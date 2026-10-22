@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+tests/
+scripts/
+docs/
+Портфолио/
+*.log

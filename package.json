@@ -1,0 +1,16 @@
+{
+  "name": "ai-consultant",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ИИ-консультант для интернет-магазина: подбор по каталогу, память о клиенте, заказ менеджеру в Telegram",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server.js",
+    "telegram": "node --env-file-if-exists=.env scripts/telegram-polling.js",
+    "webhook": "node --env-file-if-exists=.env scripts/set-webhook.js",
+    "test": "node --test \"tests/*.test.js\""
+  }
+}
